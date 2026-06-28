@@ -1,4 +1,8 @@
+
+
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React from 'react';
+import { auth } from '../firebase/firebase.init';
 
 const Register = () => {
     const handleRegister = e =>{
@@ -6,14 +10,21 @@ const Register = () => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log(email, password);
-        
+        createUserWithEmailAndPassword(auth,email,password)
+        .then(result=>{
+          console.log(result);
+          
+        })
+        .catch(error=>{
+          console.log(error);
+          
+        })
     }
     return (
-        <div>
-            <h2>register please</h2>
-              <form onSubmit={handleRegister}>
+        <div className=' mt-12 max-w-sm mx-auto'>
+            <h2 className='text-2xl font-bold mb-4 '>Register please</h2>
+              <form className='space-y-4' onSubmit={handleRegister}>
                 {/* email field */}
-                <div className="join">
   <div>
     <label className="input validator join-item">
       <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -32,8 +43,6 @@ const Register = () => {
     </label>
     <div className="validator-hint hidden">Enter valid email address</div>
   </div>
-</div>
-<br />
                 {/* password field */}
                 <label className="input validator">
   <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -64,7 +73,6 @@ const Register = () => {
   Must be more than 8 characters, including
   <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
 </p>
-<br />
 <input className='btn btn-primary' type="submit" value="Submit" />
               </form>
         </div>
