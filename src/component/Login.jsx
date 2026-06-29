@@ -11,17 +11,22 @@ const Login = () => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email, password);
+        const terms = e.target.terms.checked;
+        console.log(email, password, terms);
 
         setSuccess(false)
         setErrorMassage('')
-
+if(!terms){
+    setErrorMassage("please accept our terms and condition");
+    return
+}
         //    password validation
         // const passwordRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
         // if(passwordRegExp.test(password) === false){
         //     setErrorMassage("password must have one lower case, one upper case, one digit and 6 characters longer");
         //     return;
         // }
+
         if (/[A-Z]/.test(password) === false) {
             setErrorMassage("password must be 1 character upper case");
             return;
@@ -58,12 +63,17 @@ const Login = () => {
                         <input type="email" name='email' className="input" placeholder="Email" />
                         <label className="label">Password</label>
                         <div className='relative'>
-                            <input type={showPassword?"text":"password"}name='password' className="input " placeholder="Password" />
-                            <button onClick={()=>setShowPassword(!showPassword)} className='btn btn-xs absolute top-2 right-6'>
-                                {showPassword?<FaEyeSlash />:<FaEye/>}</button>
+                            <input type={showPassword ? "text" : "password"} name='password' className="input " placeholder="Password" />
+                            <button onClick={() => setShowPassword(!showPassword)} className='btn btn-xs absolute top-2 right-6'>
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}</button>
                         </div>
 
                         <div><a className="link link-hover">Forgot password?</a></div>
+
+                        <label className="label">
+                            <input name='terms' type="checkbox" className='checkbox' />
+                            Accept terms and condition
+                        </label>
                         <button className="btn btn-neutral mt-4">Login</button>
                     </form>
                     {
