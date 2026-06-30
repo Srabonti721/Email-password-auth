@@ -8,7 +8,7 @@ const SignIn = () => {
     const [success, setSuccess] = useState(false)
     const [errorMassage, setErrorMassage] = useState('');
     const [showPassword, setShowPassword] = useState(false)
-    const handleLogin = e => {
+    const handleSignIn = e => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
@@ -59,7 +59,7 @@ const SignIn = () => {
         <div className="hero mt-12">
             <div className="card  w-full max-w-sm mx-auto shrink-0 shadow-2xl">
                 <div className="card-body">
-                    <form className="fieldset" onSubmit={handleLogin}>
+                    <form className="fieldset" onSubmit={handleSignIn}>
                         <label className="label">Email</label>
                         <input type="email" name='email' className="input" placeholder="Email" />
                         <label className="label">Password</label>
@@ -75,7 +75,7 @@ const SignIn = () => {
                             <input name='terms' type="checkbox" className='checkbox' />
                             Accept terms and condition <Link className='text-blue-700 text-sm underline' to={'/login'}>Login</Link>
                         </label>
-                        <button className="btn btn-neutral mt-4">Login</button>
+                        <button className="btn btn-neutral mt-4">Sign In</button>
                     </form>
                     {
                         errorMassage && <p className='text-red-400'>{errorMassage}</p>
