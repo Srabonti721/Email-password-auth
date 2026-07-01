@@ -1,8 +1,9 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react';
 import { auth } from '../firebase/firebase.init';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router';
+import { log } from 'firebase/firestore/lite/pipelines';
 
 const SignIn = () => {
     const [success, setSuccess] = useState(false)
@@ -10,10 +11,13 @@ const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false)
     const handleSignIn = e => {
         e.preventDefault();
+
+        const name = e.target.name.value;
+        const photo = e.target.photo.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
         const terms = e.target.terms.checked;
-        console.log(email, password, terms);
+        console.log(email, password, terms, name, photo);
 
         setSuccess(false)
         setErrorMassage('')
@@ -48,8 +52,25 @@ const SignIn = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(result => {
                 console.log(result);
-                setSuccess(true)
+                
+                sendEmailVerification(auth.currentUser)
+                .then(()=>{
+                   setSuccess(true);
+                   alert("we sent a you a verification email please check your email")
+                })
+                            // update user photo
+            const profile = {
+                displayName : name,
+                photoURL : photo
+            }
+            updateProfile(auth.currentUser,profile)
+            .then(()=>{
+                console.log("USER PROFILE UPDATE");
             })
+            .catch((error)=>console.log(error))
+            })
+
+            
             .catch(error => {
                 console.log(error.message);
                 setErrorMassage(error.message)
@@ -60,6 +81,10 @@ const SignIn = () => {
             <div className="card  w-full max-w-sm mx-auto shrink-0 shadow-2xl">
                 <div className="card-body">
                     <form className="fieldset" onSubmit={handleSignIn}>
+                        <label className="label">Name</label>
+                        <input type="text" name='name' className="input" placeholder="NAME" />
+                        <label className="label">Photo URL</label>
+                        <input type="text" name='photo' className="input" placeholder="Photo URL" />
                         <label className="label">Email</label>
                         <input type="email" name='email' className="input" placeholder="Email" />
                         <label className="label">Password</label>
